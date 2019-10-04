@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'com.dominiccobo.fyp'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.eclipse.lsp4j:org.eclipse.lsp4j:0.8.1'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
