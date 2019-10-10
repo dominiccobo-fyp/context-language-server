@@ -4,6 +4,7 @@ import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 
 import java.util.concurrent.CompletableFuture;
@@ -15,19 +16,22 @@ import java.util.concurrent.CompletableFuture;
  */
 public class OrganisationCtxAwareLangServer implements LanguageServer {
 
-    private CustomTextDocumentService customTextDocumentService;
-    private WorkspaceService workspaceService;
+    private final CustomTextDocumentService customTextDocumentService;
+    private final WorkspaceService workspaceService;
 
-    public OrganisationCtxAwareLangServer() {
-        this.customTextDocumentService = new CustomTextDocumentService();
-        this.workspaceService = new CustomWorkspaceService();
+    public OrganisationCtxAwareLangServer(
+            CustomTextDocumentService customTextDocumentService,
+            CustomWorkspaceService workspaceService
+    ) {
+        this.customTextDocumentService = customTextDocumentService;
+        this.workspaceService = workspaceService;
     }
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
 
         InitializeResult initialisedResults = new InitializeResult(new ServerCapabilities());
-        final ServerCapabilities capabilities = initialisedResults.getCapabilities();
+        initialisedResults.getCapabilities().setHoverProvider(Boolean.TRUE);
         return CompletableFuture.supplyAsync(() -> initialisedResults);
     }
 
@@ -42,7 +46,7 @@ public class OrganisationCtxAwareLangServer implements LanguageServer {
     }
 
     @Override
-    public org.eclipse.lsp4j.services.TextDocumentService getTextDocumentService() {
+    public TextDocumentService getTextDocumentService() {
         return this.customTextDocumentService;
     }
 
@@ -50,6 +54,4 @@ public class OrganisationCtxAwareLangServer implements LanguageServer {
     public WorkspaceService getWorkspaceService() {
         return this.workspaceService;
     }
-
-
 }
