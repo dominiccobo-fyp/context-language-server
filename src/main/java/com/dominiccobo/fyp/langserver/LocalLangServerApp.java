@@ -48,15 +48,13 @@ public class LocalLangServerApp {
         public void onApplicationLaunched() {
             // this needs a new thread so that it does not block the main thread ....
             new Thread(() -> {
-
-                while (state.equals(State.RUNNING)) {
-                    try {
-                        LOG.info("Starting up LSP local server on {}", DEFAULT_PORT);
-                        factory.create(serverSocket.accept()).start();
-                    } catch (IOException e) {
-                        LOG.error("Could not create a new language client:", e);
-                    }
+                try {
+                    LOG.info("Starting up LSP local server on {}", DEFAULT_PORT);
+                    factory.create(serverSocket.accept()).start();
+                } catch (IOException e) {
+                    LOG.error("Could not create a new language client:", e);
                 }
+
 
             }).start();
         }
