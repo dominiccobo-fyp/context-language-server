@@ -2,6 +2,7 @@ package com.dominiccobo.fyp.langserver;
 
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Dominic Cobo (contact@dominiccobo.com)
  */
+@ConditionalOnProperty(name = "lspServerEnabled", havingValue = "true")
 @Component
 public class CustomWorkspaceService implements org.eclipse.lsp4j.services.WorkspaceService {
     @Override

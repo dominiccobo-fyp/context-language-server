@@ -7,6 +7,7 @@ import org.eclipse.lsp4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.function.Consumer;
  *
  * @author Dominic Cobo (contact@dominiccobo.com)
  */
+@ConditionalOnProperty(name = "lspServerEnabled", havingValue = "true")
 @Component
 public class CustomTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
 
