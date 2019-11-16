@@ -1,4 +1,4 @@
-package com.dominiccobo.fyp.langserver;
+package com.dominiccobo.fyp.langserver.lsp;
 
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;

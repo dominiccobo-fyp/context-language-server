@@ -1,12 +1,15 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'maven'
+    id 'maven-publish'
     id 'org.springframework.boot' version '2.1.9.RELEASE'
+    id "com.palantir.git-version" version "0.12.2"
 }
 
 
 group 'com.dominiccobo.fyp'
-version '1.0.0-SNAPSHOT'
+version versionDetails().lastTag
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -14,6 +17,30 @@ targetCompatibility = 1.8
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url 'https://pkgs.dev.azure.com/1422016/_packaging/1422016/maven/v1'
+        credentials {
+            username "AZURE_ARTIFACTS"
+            password System.getenv("AZURE_ARTIFACTS_ENV_ACCESS_TOKEN") ?: "${azureArtifactsGradleAccessToken}"
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url 'https://pkgs.dev.azure.com/1422016/_packaging/1422016/maven/v1'
+            credentials {
+                username "AZURE_ARTIFACTS"
+                password System.getenv("AZURE_ARTIFACTS_ENV_ACCESS_TOKEN") ?: "${azureArtifactsGradleAccessToken}"
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 dependencies {
@@ -25,20 +52,4 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation 'org.axonframework:axon-spring-boot-starter:4.2'
     implementation 'com.dominiccobo.fyp:context-lsp-api:1.0.0-SNAPSHOT'
-}
-
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'com.dominiccobo.fyp.langserver.ApplicationEntryPoint'
-        )
-    }
-    baseName 'btimescrapercli'
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
 }

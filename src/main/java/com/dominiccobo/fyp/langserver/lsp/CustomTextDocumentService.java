@@ -1,4 +1,4 @@
-package com.dominiccobo.fyp.langserver;
+package com.dominiccobo.fyp.langserver.lsp;
 
 import com.dominiccobo.fyp.api.queries.GetWebAppForUpstreamUrl;
 import org.axonframework.messaging.responsetypes.ResponseTypes;

@@ -1,4 +1,4 @@
-package com.dominiccobo.fyp.langserver;
+package com.dominiccobo.fyp.langserver.lsp;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.internal.storage.file.FileRepository;

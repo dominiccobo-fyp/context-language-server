@@ -1,4 +1,4 @@
-package com.dominiccobo.fyp.langserver;
+package com.dominiccobo.fyp.langserver.lsp;
 
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
