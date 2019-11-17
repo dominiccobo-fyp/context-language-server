@@ -1,4 +1,4 @@
-package com.dominiccobo.fyp.langserver.lsp;
+package com.dominiccobo.fyp.langserver;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
  * @author Dominic Cobo (contact@dominiccobo.com)
  */
 public class GitUtils {
+
+    private GitUtils() {}
 
     /**
      * Calls a local installation of Git to retrieve the Git project parent folder as JGIt
@@ -49,6 +51,7 @@ public class GitUtils {
     static String getUpstream(File projectGitObjectDir) throws IOException {
         final FileRepository fileRepository = new FileRepository(projectGitObjectDir);
         final String originUrl = fileRepository.getConfig().getString("remote", "origin", "url");
+        fileRepository.close();
         return originUrl;
     }
 
