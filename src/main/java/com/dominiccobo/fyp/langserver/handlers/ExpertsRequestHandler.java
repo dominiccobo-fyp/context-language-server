@@ -51,7 +51,8 @@ public class ExpertsRequestHandler extends AbstractWebSocketRequestHandler<Exper
 
         @Override
         AssociatedExpertsQuery buildQueryFromContext(QueryContext queryContext) {
-            return new AssociatedExpertsQuery(queryContext);
+            // FIXME: pagination needs improving ...
+            return new AssociatedExpertsQuery(queryContext, new Pagination(0, 400));
         }
     }
 }

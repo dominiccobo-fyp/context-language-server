@@ -1,7 +1,10 @@
 package com.dominiccobo.fyp.langserver;
 
+import com.dominiccobo.fyp.context.models.git.GitRemoteIdentifier;
+import com.dominiccobo.fyp.context.models.git.GitRemoteURL;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,15 +12,18 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Collection of ultities
  *
  * @author Dominic Cobo (contact@dominiccobo.com)
  */
-public class GitUtils {
+@Component
+public class GitFolderRemoteResolver {
 
-    private GitUtils() {}
+    private GitFolderRemoteResolver() {}
 
     /**
      * Calls a local installation of Git to retrieve the Git project parent folder as JGIt
@@ -26,9 +32,9 @@ public class GitUtils {
      * @return the project root....
      * @throws IOException
      */
-    static String workingDirectory(URI fileUri) throws IOException {
+    private static String workingDirectory(URI fileUri) throws IOException {
         final ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.directory(new File(fileUri).getParentFile());
+        processBuilder.directory(new File(fileUri));
         processBuilder.command("git", "rev-parse", "--show-toplevel");
         final Process start = processBuilder.start();
         final InputStream inputStream = start.getInputStream();
@@ -42,22 +48,30 @@ public class GitUtils {
      * @return
      * @throws URISyntaxException
      */
-    static File getGitObjectDirForProjectRoot(String projectRootDir) throws URISyntaxException {
+    private static File getGitObjectDirForProjectRoot(String projectRootDir) throws URISyntaxException {
         projectRootDir = projectRootDir + "/.git";
         final File file = new File(projectRootDir);
         return file;
     }
 
-    static String getUpstream(File projectGitObjectDir) throws IOException {
+    private static Map<GitRemoteIdentifier, GitRemoteURL> getRemoteURLs(File projectGitObjectDir) throws IOException {
         final FileRepository fileRepository = new FileRepository(projectGitObjectDir);
-        final String originUrl = fileRepository.getConfig().getString("remote", "origin", "url");
+        Map<GitRemoteIdentifier, GitRemoteURL> remotes = new HashMap<>();
+        for (String remoteName : fileRepository.getRemoteNames()) {
+            String url = getUrlForRemoteName(fileRepository, remoteName);
+            remotes.put(new GitRemoteIdentifier(remoteName), new GitRemoteURL(url));
+        }
         fileRepository.close();
-        return originUrl;
+        return remotes;
     }
 
-    static String getUpstreamForFile(URI fileUri) throws IOException, URISyntaxException {
+    private static String getUrlForRemoteName(FileRepository fileRepository, String remoteName) {
+        return fileRepository.getConfig().getString("remote", remoteName, "url");
+    }
+
+    public Map<GitRemoteIdentifier, GitRemoteURL> getRemotesForDirectory(URI fileUri) throws IOException, URISyntaxException {
         final String workingDirectory = workingDirectory(fileUri);
         final File gitObjectDirForProjectRoot = getGitObjectDirForProjectRoot(workingDirectory);
-        return getUpstream(gitObjectDirForProjectRoot);
+        return getRemoteURLs(gitObjectDirForProjectRoot);
     }
 }

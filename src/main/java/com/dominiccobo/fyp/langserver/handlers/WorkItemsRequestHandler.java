@@ -53,7 +53,7 @@ public class WorkItemsRequestHandler extends AbstractWebSocketRequestHandler<Wor
 
         @Override
         AssociatedWorkItemsQuery buildQueryFromContext(QueryContext queryContext) {
-            return new AssociatedWorkItemsQuery(queryContext);
+            return new AssociatedWorkItemsQuery(queryContext, new Pagination(0, 400));
         }
     }
 
