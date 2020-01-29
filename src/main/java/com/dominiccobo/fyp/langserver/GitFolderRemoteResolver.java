@@ -35,7 +35,7 @@ public class GitFolderRemoteResolver {
     private static String workingDirectory(URI fileUri) throws IOException {
         final ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.directory(new File(fileUri));
-        processBuilder.command("git", "rev-parse", "--show-toplevel");
+        processBuilder.command("/usr/bin/git", "rev-parse", "--show-toplevel");
         final Process start = processBuilder.start();
         final InputStream inputStream = start.getInputStream();
         final String s = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
