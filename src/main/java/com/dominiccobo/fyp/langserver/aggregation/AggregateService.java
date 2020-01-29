@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AggregateService {
@@ -38,6 +36,12 @@ public class AggregateService {
     }
 
     public List<WorkItem> queryForWorkItems(String sessionIdentifier) throws IOException, URISyntaxException {
-        return workItems.get(sessionIdentifier).getResults();
+        Optional<WorkItemsAggregate> nullableReturn = Optional.ofNullable(workItems.get(sessionIdentifier));
+        if (nullableReturn.isPresent()) {
+            return nullableReturn.get().getResults();
+        }
+        else {
+            return new ArrayList<>();
+        }
     }
 }

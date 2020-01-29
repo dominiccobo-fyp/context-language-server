@@ -33,10 +33,30 @@ public class WorkItemsController {
     }
 
     @GetMapping("/workItems")
-    public String getQueryFor(@RequestParam String uri) throws IOException, URISyntaxException {
+    public Response getQueryFor(@RequestParam String uri) throws IOException, URISyntaxException {
         LOG.info("Received query creation request for ...");
         WorkItemsAggregate aggregate = aggregateService.createWorkItemsAggregate(uri);
         aggregateService.run(aggregate);
-        return aggregate.getIdentifier();
+        return new Response(aggregate.getIdentifier(), "Aggregate created. Query /workItems/{id} for results.");
+    }
+
+    public static class Response {
+        private String identifier;
+        private String message;
+
+        Response() {}
+
+        public Response(String identifier, String message) {
+            this.identifier = identifier;
+            this.message = message;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 }
