@@ -1,4 +1,4 @@
-package com.dominiccobo.fyp.langserver.aggregation;
+package com.dominiccobo.fyp.langserver.sources.workitems;
 
 import com.dominiccobo.fyp.context.models.WorkItem;
 import com.dominiccobo.fyp.langserver.GitFolderRemoteResolver;
@@ -12,14 +12,14 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 @Service
-public class AggregateService {
+public class WorkItemAggregateService {
 
     private final QueryGateway queryGateway;
     private final GitFolderRemoteResolver gitFolderRemoteResolver;
     private final Map<String, WorkItemsAggregate> workItems = new HashMap<>();
 
     @Autowired
-    public AggregateService(QueryGateway queryGateway, GitFolderRemoteResolver gitFolderRemoteResolver) {
+    public WorkItemAggregateService(QueryGateway queryGateway, GitFolderRemoteResolver gitFolderRemoteResolver) {
         this.queryGateway = queryGateway;
         this.gitFolderRemoteResolver = gitFolderRemoteResolver;
     }

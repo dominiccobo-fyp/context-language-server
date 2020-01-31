@@ -1,4 +1,4 @@
-package com.dominiccobo.fyp.langserver.aggregation;
+package com.dominiccobo.fyp.langserver.sources;
 
 import com.dominiccobo.fyp.context.models.WorkItem;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class StreamTracker<StreamType> {
         });
     }
 
-    List<StreamType> getItems() {
+    public List<StreamType> getItems() {
         return buffer;
     }
 }
