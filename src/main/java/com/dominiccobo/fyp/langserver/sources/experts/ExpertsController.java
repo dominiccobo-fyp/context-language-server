@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -27,7 +28,10 @@ public class ExpertsController {
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "20") int limit) throws IOException, URISyntaxException {
 
-        return aggregateService.queryForExperts(queryIdentifier);
+        return aggregateService.queryForExperts(queryIdentifier).stream()
+                .skip(page * limit)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/experts")
@@ -35,7 +39,7 @@ public class ExpertsController {
         LOG.info("Received query creation request for ...");
         ExpertsAggregate aggregate = aggregateService.createExpertsAggregate(uri);
         aggregateService.run(aggregate);
-        return new Response(aggregate.getIdentifier(), "Aggregate created. Query /workItems/{id} for results.");
+        return new Response(aggregate.getIdentifier(), "Aggregate created. Query /experts/{id} for results.");
     }
 
     public static class Response {

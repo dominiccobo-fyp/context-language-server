@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -27,7 +28,10 @@ public class WorkItemsController {
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "20") int limit) throws IOException, URISyntaxException {
 
-        return workItemAggregateService.queryForWorkItems(queryIdentifier);
+        return workItemAggregateService.queryForWorkItems(queryIdentifier).stream()
+                .skip(page * limit)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/workItems")
