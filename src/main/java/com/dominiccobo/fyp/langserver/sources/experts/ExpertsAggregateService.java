@@ -16,7 +16,7 @@ public class ExpertsAggregateService {
 
     private final QueryGateway queryGateway;
     private final GitFolderRemoteResolver gitFolderRemoteResolver;
-    private final Map<String, ExpertsAggregate> Experts = new HashMap<>();
+    private final Map<String, ExpertsAggregate> experts = new HashMap<>();
 
     @Autowired
     public ExpertsAggregateService(QueryGateway queryGateway, GitFolderRemoteResolver gitFolderRemoteResolver) {
@@ -26,7 +26,7 @@ public class ExpertsAggregateService {
 
     public ExpertsAggregate createExpertsAggregate(String uri) throws IOException, URISyntaxException {
         ExpertsAggregate createdAggregate = new ExpertsAggregate(queryGateway, gitFolderRemoteResolver, uri);
-        Experts.put(createdAggregate.getIdentifier(), createdAggregate);
+        experts.put(createdAggregate.getIdentifier(), createdAggregate);
         return createdAggregate;
     }
 
@@ -36,7 +36,7 @@ public class ExpertsAggregateService {
     }
 
     public List<Expert> queryForExperts(String sessionIdentifier) throws IOException, URISyntaxException {
-        Optional<ExpertsAggregate> nullableReturn = Optional.ofNullable(Experts.get(sessionIdentifier));
+        Optional<ExpertsAggregate> nullableReturn = Optional.ofNullable(experts.get(sessionIdentifier));
         if (nullableReturn.isPresent()) {
             return nullableReturn.get().getResults();
         }

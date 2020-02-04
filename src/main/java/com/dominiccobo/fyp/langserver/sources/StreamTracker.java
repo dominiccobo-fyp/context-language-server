@@ -1,6 +1,5 @@
 package com.dominiccobo.fyp.langserver.sources;
 
-import com.dominiccobo.fyp.context.models.WorkItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +16,7 @@ public class StreamTracker<StreamType> {
     private final List<StreamType> buffer = new ArrayList<>();
 
     public StreamTracker(Stream<StreamType> results) {
-        results.forEach(e -> {
-            buffer.add(e);
-            LOG.debug("Adding {}", ((WorkItem) e).getTitle());
-        });
+        results.forEach(buffer::add);
     }
 
     public List<StreamType> getItems() {
